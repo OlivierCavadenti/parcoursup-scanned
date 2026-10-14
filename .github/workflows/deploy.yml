@@ -57,6 +57,8 @@ jobs:
       - name: Vérification des liens externes (avertissements)
         run: pnpm links:check
         continue-on-error: true
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outcome == 'success' && steps.pages.outputs.base_url || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
 
       - run: touch out/.nojekyll
 

@@ -11,7 +11,7 @@ Dernière mise à jour : 14 octobre 2026.
 | C. Expérience pédagogique | ✅ | Accueil, 7 modules « Comprendre », idées reçues, transparence, glossaire, sources |
 | D. Simulateur | ❌ abandonné | **Décision de l'utilisateur : pas de simulateurs.** Remplacés par des schémas animés non manipulables |
 | E. Conformité | ✅ | Portage TypeScript + 730 cas différentiels contre le Java officiel + tests de mutation |
-| F. Open data | 🟡 | Chaîne d'import exécutée au déploiement ; explorateur, fiche, comparateur ; non testée sur données réelles (portail injoignable depuis l'environnement de développement) |
+| F. Open data | ✅ | Import réel validé en CI (14/10/2026) : 8 sessions, 2018 à 2025 (10 697 à 14 252 formations) ; tous les indicateurs trouvés pour 2022-2025 ; explorateur, fiche, comparateur, évolution entre sessions |
 | G. Finalisation | 🟡 | Accessibilité (axe : 0 violation sérieuse, clair et sombre), SEO, e2e bureau + mobile ; activation de GitHub Pages à faire par le propriétaire du dépôt |
 
 ## Décisions

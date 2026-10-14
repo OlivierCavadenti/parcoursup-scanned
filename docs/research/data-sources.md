@@ -13,6 +13,19 @@ Le portail `data.enseignementsup-recherche.gouv.fr` n'était **pas joignable** d
 l'environnement de développement (refus du proxy réseau). Aucune donnée réelle n'a donc
 été téléchargée ni affichée pendant le développement, et **aucune donnée n'a été inventée**.
 
+## Résultat du premier import (CI GitHub Actions, 14/10/2026)
+
+| Session | Jeu de données | Formations | Indicateurs absents |
+|---|---|---|---|
+| 2025 | fr-esr-parcoursup | 14 252 | 0 |
+| 2024 | fr-esr-parcoursup_2024 | 14 079 | 0 |
+| 2023 | fr-esr-parcoursup_2023 | 13 869 | 0 |
+| 2022 | fr-esr-parcoursup_2022 | 13 644 | 0 |
+| 2021 | fr-esr-parcoursup_2021 | 13 396 | 1 |
+| 2020 | fr-esr-parcoursup_2020 | 12 760 | 2 |
+| 2019 | fr-esr-parcoursup-2019 | 11 577 | 10 |
+| 2018 | fr-esr-parcoursup-2018 | 10 697 | 10 |
+
 ## Chaîne d'import (`scripts/data/fetch-parcoursup.mjs`)
 
 1. Téléchargement de l'export CSV de l'API Opendatasoft v2.1

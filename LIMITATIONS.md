@@ -25,9 +25,12 @@
 - Les décisions de justice sur les algorithmes locaux sont citées sans être résumées.
 
 ## Données ouvertes
-- L'import n'a pas pu être testé sur les données réelles ; les noms de colonnes attendus
-  sont à confirmer au premier déploiement (le manifeste liste colonnes trouvées et manquantes).
-- La cartographie des formations n'est pas intégrée ; pas de carte ni d'évolution pluriannuelle.
+- Import validé en CI le 14/10/2026 sur 8 sessions (2018-2025). Indicateurs absents : 10 en
+  2018 et 2019, 2 en 2020, 1 en 2021 (affichés « — ») ; leur équivalent éventuel sous un autre
+  nom de colonne n'a pas été recherché.
+- L'évolution entre sessions repose sur l'identifiant de formation : une formation
+  ré-identifiée apparaît comme absente des sessions concernées.
+- La cartographie des formations n'est pas intégrée ; pas de carte.
 
 ## Déploiement
 - GitHub Pages doit être activé par le propriétaire du dépôt (Source : GitHub Actions).

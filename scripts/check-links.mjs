@@ -15,10 +15,13 @@ async function* fichiersHtml(dir) {
 }
 
 const liens = new Map();
+/* Les URL du site lui-même (canonical, Open Graph) ne sont pas vérifiables avant publication. */
+const site = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://oliviercavadenti.github.io/parcoursup-scanned").toLowerCase();
 for await (const f of fichiersHtml(path.resolve("out"))) {
   const html = await readFile(f, "utf8");
   for (const m of html.matchAll(/href="(https?:\/\/[^"#]+)(#[^"]*)?"/g)) {
     const url = m[1].replace(/&amp;/g, "&");
+    if (url.toLowerCase().startsWith(site)) continue;
     if (!liens.has(url)) liens.set(url, path.relative("out", f));
   }
 }

@@ -29,6 +29,29 @@ type Champ = z.infer<typeof ChampSchema>;
 const SessionSchema = z.object({ session: z.string(), source: z.string(), champs: z.array(ChampSchema), lignes: z.array(z.array(z.union([z.string(), z.number(), z.null()]))) });
 
 type Formation = Record<string, string | number | null> & { _i: number };
+type DonneesSession = { champs: Champ[]; formations: Formation[]; source: string };
+
+/* Cache des sessions déjà téléchargées (une requête par fichier, au plus). */
+const cacheSessions = new Map<string, Promise<DonneesSession>>();
+function chargerSession(session: string): Promise<DonneesSession> {
+  let p = cacheSessions.get(session);
+  if (!p) {
+    p = fetch(asset(`/data/parcoursup/${session}.json`))
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((j) => {
+        const s = SessionSchema.parse(j);
+        const formations = s.lignes.map((l, i) => {
+          const o: Formation = { _i: i };
+          s.champs.forEach((c, k) => (o[c.cle] = l[k] ?? null));
+          return o;
+        });
+        return { champs: s.champs, formations, source: s.source };
+      });
+    p.catch(() => cacheSessions.delete(session));
+    cacheSessions.set(session, p);
+  }
+  return p;
+}
 
 const INDICATEURS_FICHE = ["capacite", "voeux", "voeuxPP", "classesPP", "propositions", "acceptes", "tauxAcces", "pctBoursiers", "pctFemmes", "pctBG", "pctBT", "pctBP", "rangGrp1", "rangGrp2", "rangGrp3"];
 
@@ -39,7 +62,7 @@ const fmt = (v: unknown, type?: Champ["type"]) =>
 export function Explorateur() {
   const [manifest, setManifest] = useState<Manifest | null | "absent">(null);
   const [session, setSession] = useState<string | null>(null);
-  const [donnees, setDonnees] = useState<{ champs: Champ[]; formations: Formation[]; source: string } | null>(null);
+  const [donnees, setDonnees] = useState<DonneesSession | null>(null);
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const [q, setQ] = useState("");
@@ -65,16 +88,9 @@ export function Explorateur() {
     if (!session) return;
     setChargement(true);
     setErreur(null);
-    fetch(asset(`/data/parcoursup/${session}.json`))
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((j) => {
-        const s = SessionSchema.parse(j);
-        const formations = s.lignes.map((l, i) => {
-          const o: Formation = { _i: i };
-          s.champs.forEach((c, k) => (o[c.cle] = l[k] ?? null));
-          return o;
-        });
-        setDonnees({ champs: s.champs, formations, source: s.source });
+    chargerSession(session)
+      .then((d) => {
+        setDonnees(d);
         setComparaison([]);
         setFiche(null);
       })
@@ -237,7 +253,7 @@ export function Explorateur() {
         </>
       )}
 
-      <AnimatePresence>{ficheF && donnees && <Fiche formation={ficheF} champs={donnees.champs} fermer={() => setFiche(null)} session={session!} />}</AnimatePresence>
+      <AnimatePresence>{ficheF && donnees && <Fiche formation={ficheF} champs={donnees.champs} fermer={() => setFiche(null)} session={session!} sessions={manifest.sessions.map((x) => x.session)} />}</AnimatePresence>
     </div>
   );
 }
@@ -307,7 +323,89 @@ function Comparateur({ formations, champ, retirer }: { formations: Formation[]; 
   );
 }
 
-function Fiche({ formation, champs, fermer, session }: { formation: Formation; champs: Champ[]; fermer: () => void; session: string }) {
+const SERIES = [
+  { cle: "voeux", label: "Candidats", couleur: "var(--primary-2)" },
+  { cle: "propositions", label: "Propositions", couleur: "var(--accent-2)" },
+  { cle: "acceptes", label: "Acceptations", couleur: "var(--green-2)" },
+  { cle: "capacite", label: "Capacité", couleur: "var(--amber-2)" },
+] as const;
+
+function Evolution({ formation, sessions }: { formation: Formation; sessions: string[] }) {
+  const [etat, setEtat] = useState<"repos" | "chargement" | "ok" | "erreur">("repos");
+  const [points, setPoints] = useState<{ session: string; f: Formation | null }[]>([]);
+  const id = formation.id;
+  const charger = () => {
+    setEtat("chargement");
+    const ordre = [...sessions].sort();
+    Promise.all(ordre.map((s) => chargerSession(s).then((d) => ({ session: s, f: d.formations.find((x) => x.id === id) ?? null }))))
+      .then((p) => {
+        setPoints(p);
+        setEtat("ok");
+      })
+      .catch(() => setEtat("erreur"));
+  };
+  if (typeof id !== "string") return <p className="text-sm text-muted">Identifiant de formation absent : évolution indisponible.</p>;
+  if (etat === "repos" || etat === "chargement") {
+    return (
+      <button type="button" onClick={charger} disabled={etat === "chargement"} className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-primary ring-1 ring-line-strong hover:bg-surface-2 disabled:opacity-60">
+        {etat === "chargement" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <BarChart3 className="h-4 w-4" aria-hidden="true" />}
+        {etat === "chargement" ? `Chargement des ${sessions.length} sessions…` : `Afficher l'évolution sur ${sessions.length} sessions`}
+      </button>
+    );
+  }
+  if (etat === "erreur") return <p className="text-sm text-rose">Impossible de charger les autres sessions.</p>;
+  const trouves = points.filter((p) => p.f);
+  const max = Math.max(1, ...trouves.flatMap((p) => SERIES.map((s) => Number(p.f![s.cle]) || 0)));
+  const W = 560, H = 180, M = 28;
+  const x = (i: number) => M + (i * (W - 2 * M)) / Math.max(1, points.length - 1);
+  const y = (v: number) => H - M - (v / max) * (H - 2 * M);
+  return (
+    <figure>
+      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Évolution : ${trouves.map((p) => `${p.session} : ${fmt(p.f!.voeux)} candidats`).join(", ")}`}>
+        {[0, 0.5, 1].map((t) => (
+          <g key={t}>
+            <line x1={M} x2={W - M} y1={y(max * t)} y2={y(max * t)} stroke="var(--line)" />
+            <text x={4} y={y(max * t) + 4} fontSize={10} fill="var(--muted)">{Math.round(max * t).toLocaleString("fr-FR")}</text>
+          </g>
+        ))}
+        {points.map((p, i) => (
+          <text key={p.session} x={x(i)} y={H - 8} fontSize={10} textAnchor="middle" fill={p.f ? "var(--ink-2)" : "var(--muted)"}>{p.session}</text>
+        ))}
+        {SERIES.map((s) => {
+          const pts = points.map((p, i) => (p.f && typeof p.f[s.cle] === "number" ? [x(i), y(p.f[s.cle] as number)] : null));
+          const segments: string[] = [];
+          let cur = "";
+          for (const pt of pts) {
+            if (pt) cur += `${cur ? "L" : "M"}${pt[0]},${pt[1]}`;
+            else if (cur) { segments.push(cur); cur = ""; }
+          }
+          if (cur) segments.push(cur);
+          return (
+            <g key={s.cle}>
+              {segments.map((d, k) => (
+                <motion.path key={k} d={d} fill="none" stroke={s.couleur} strokeWidth={2.5} strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.9 }} />
+              ))}
+              {pts.map((pt, k) => pt && <circle key={k} cx={pt[0]} cy={pt[1]} r={3.5} fill={s.couleur} />)}
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption className="mt-2 space-y-1 text-xs text-muted">
+        <span className="flex flex-wrap gap-3">
+          {SERIES.map((s) => (
+            <span key={s.cle} className="flex items-center gap-1.5 text-ink-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: s.couleur }} />{s.label}</span>
+          ))}
+        </span>
+        <span className="block">
+          Formation retrouvée dans {trouves.length} session(s) sur {points.length} grâce à son identifiant. Une session absente peut signifier une formation
+          nouvelle, fermée ou ré-identifiée. Les définitions des indicateurs peuvent varier d'une année à l'autre.
+        </span>
+      </figcaption>
+    </figure>
+  );
+}
+
+function Fiche({ formation, champs, fermer, session, sessions }: { formation: Formation; champs: Champ[]; fermer: () => void; session: string; sessions: string[] }) {
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && fermer();
     window.addEventListener("keydown", k);
@@ -383,6 +481,15 @@ function Fiche({ formation, champs, fermer, session }: { formation: Formation; c
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {sessions.length > 1 && (
+          <section className="mt-6" aria-labelledby="evolution">
+            <h3 id="evolution" className="mb-3 text-sm font-semibold text-ink">
+              Évolution d'une session à l'autre
+            </h3>
+            <Evolution formation={formation} sessions={sessions} />
           </section>
         )}
 
