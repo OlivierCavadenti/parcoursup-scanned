@@ -15,16 +15,16 @@ export function PseudoCode({ titre, lignes, className }: { titre: string; lignes
         <span className="ml-2">{titre}</span>
         <span className="ml-auto rounded bg-white/5 px-1.5 py-0.5 text-[0.65rem] uppercase tracking-wider">pseudo-code pédagogique</span>
       </figcaption>
-      <pre className="overflow-x-auto p-4 text-[0.82rem] leading-relaxed sm:text-sm">
+      <pre tabIndex={0} aria-label={`Pseudo-code : ${titre}`} className="overflow-x-auto p-4 text-[0.82rem] leading-relaxed sm:text-sm">
         <code>
           {lignes.map((l, i) => {
             const commentaire = l.trimStart().startsWith("//");
             const html = commentaire ? l : l.replace(MOTS, "\u0000$1\u0001");
             return (
               <span key={i} className="block">
-                <span className="mr-4 inline-block w-5 select-none text-right text-slate-600">{i + 1}</span>
+                <span className="mr-4 inline-block w-5 select-none text-right text-slate-400">{i + 1}</span>
                 {commentaire ? (
-                  <span className="text-slate-500 italic">{l}</span>
+                  <span className="text-slate-400 italic">{l}</span>
                 ) : (
                   html.split(/(\u0000[^\u0001]*\u0001)/).map((frag, j) =>
                     frag.startsWith("\u0000") ? (

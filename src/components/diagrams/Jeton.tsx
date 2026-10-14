@@ -35,8 +35,8 @@ export function Jeton({
         "relative grid shrink-0 place-items-center rounded-[10px] font-semibold tabular-nums select-none",
         taille === "md" ? "h-9 w-9 text-[0.72rem] sm:h-10 sm:w-10 sm:text-[0.78rem]" : "h-7 w-7 text-[0.62rem]",
         STYLE_TYPE[type].cls,
-        etat === "fantome" && "opacity-25 saturate-50",
-        etat === "attenue" && "opacity-60",
+        etat === "fantome" && "!bg-transparent !text-muted !ring-0 border border-dashed border-line-strong",
+        etat === "attenue" && "!text-muted",
         className,
       )}
     >

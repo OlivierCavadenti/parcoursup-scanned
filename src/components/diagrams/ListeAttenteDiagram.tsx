@@ -94,7 +94,7 @@ export function ListeAttenteDiagram() {
                     e === "parti" && "border border-dashed border-line-strong bg-transparent text-muted",
                     vous && "z-10",
                   )}
-                  animate={{ scale: vous ? 1.12 : 1, opacity: e === "parti" ? 0.5 : 1 }}
+                  animate={{ scale: vous ? 1.12 : 1 }}
                   transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 >
                   {r}

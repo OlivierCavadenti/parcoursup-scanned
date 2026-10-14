@@ -38,11 +38,12 @@ jobs:
       - name: Tests unitaires et de conformité
         run: pnpm test
 
+      # Nécessite que GitHub Pages soit activé (Settings → Pages → Source : GitHub Actions).
+      # Sans cela, le build continue avec un chemin de base calculé et seul le déploiement échoue.
       - name: Configuration de GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
+        continue-on-error: true
 
       - name: Import des données ouvertes (non bloquant)
         run: pnpm data:fetch
@@ -50,8 +51,8 @@ jobs:
       - name: Build statique
         run: pnpm build
         env:
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outcome == 'success' && steps.pages.outputs.base_path || format('/{0}', github.event.repository.name) }}
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outcome == 'success' && steps.pages.outputs.base_url || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
 
       - name: Vérification des liens externes (avertissements)
         run: pnpm links:check

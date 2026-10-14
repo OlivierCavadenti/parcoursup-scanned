@@ -71,7 +71,7 @@ export default function Conformite() {
           </Callout>
         </SectionNiveau>
         <SectionNiveau niveau="Technique" titre="Matrice de vérification" id="matrice">
-          <div className="overflow-x-auto rounded-2xl ring-1 ring-line">
+          <div tabIndex={0} role="region" aria-label="Matrice de vérification (défilable)" className="overflow-x-auto rounded-2xl ring-1 ring-line">
             <table className="w-full min-w-[720px] text-left text-sm">
               <caption className="sr-only">Correspondance entre fonctionnalités, sources, tests et niveau de fidélité</caption>
               <thead className="bg-surface-2 text-ink">
@@ -101,7 +101,7 @@ export default function Conformite() {
           </div>
         </SectionNiveau>
         <SectionNiveau niveau="Technique" titre="Reproduire chez vous" id="reproduire">
-          <pre className="overflow-x-auto rounded-2xl bg-[#0d1426] p-5 font-mono text-sm leading-relaxed text-slate-200 ring-1 ring-white/10">
+          <pre tabIndex={0} aria-label="Commandes pour reproduire la vérification" className="overflow-x-auto rounded-2xl bg-[#0d1426] p-5 font-mono text-sm leading-relaxed text-slate-200 ring-1 ring-white/10">
             {`git clone ${OFFICIAL_REPO_MIRROR}
 cd algorithmes-de-parcoursup && mvn -q package -DskipTests
 cd ../parcoursup-scanned && pnpm install

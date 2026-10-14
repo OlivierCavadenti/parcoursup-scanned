@@ -270,7 +270,7 @@ function Comparateur({ formations, champ, retirer }: { formations: Formation[]; 
       <h2 id="titre-comparateur" className="border-b border-line px-5 py-3 font-display text-xl font-semibold text-ink">
         Comparaison ({formations.length}/4)
       </h2>
-      <div className="overflow-x-auto">
+      <div tabIndex={0} role="region" aria-label="Tableau de comparaison (défilable)" className="overflow-x-auto">
         <table className="w-full min-w-[640px] text-sm">
           <thead>
             <tr className="bg-surface-2 text-left">
@@ -292,7 +292,7 @@ function Comparateur({ formations, champ, retirer }: { formations: Formation[]; 
                 <th scope="row" className="px-4 py-2.5 text-left font-medium text-ink-2">{champ(k)?.labelOfficiel ?? champ(k)?.label}</th>
                 {formations.map((f) => (
                   <td key={f._i} className={cn("px-4 py-2.5 tabular-nums", f[k] === null ? "text-muted" : "text-ink")}>
-                    {f[k] === null ? "non publié" : fmt(f[k], champ(k)?.type)}
+                    {f[k] === null ? "—" : fmt(f[k], champ(k)?.type)}
                   </td>
                 ))}
               </tr>
@@ -301,7 +301,7 @@ function Comparateur({ formations, champ, retirer }: { formations: Formation[]; 
         </table>
       </div>
       <p className="border-t border-line px-5 py-3 text-xs text-muted">
-        Seuls des indicateurs d'une même session sont comparés. « Non publié » : valeur absente du jeu de données. Aucun score global n'est calculé.
+        Seuls des indicateurs d'une même session sont comparés. « — » : valeur absente ou sans objet dans le jeu de données. Aucun score global n'est calculé.
       </p>
     </section>
   );

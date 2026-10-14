@@ -18,15 +18,19 @@ export default function Glossaire() {
       <Container size="md" className="py-12">
         <nav aria-label="Lettres" className="mb-10 flex flex-wrap gap-2">
           {lettres.map((l) => (
-            <a key={l} href={`#lettre-${l}`} className="grid h-9 w-9 place-items-center rounded-full bg-surface font-semibold text-ink ring-1 ring-line hover:ring-ink/40">
+            <a key={l} href={`#${tries.find((t) => t.terme[0]!.toUpperCase() === l)!.id}`} className="grid h-9 w-9 place-items-center rounded-full bg-surface font-semibold text-ink ring-1 ring-line hover:ring-ink/40">
               {l}
             </a>
           ))}
         </nav>
         <dl className="space-y-4">
           {tries.map((t, i) => (
-            <div key={t.id} id={t.id} className="scroll-mt-24 rounded-3xl bg-surface p-6 ring-1 ring-line target:ring-2 target:ring-accent-2">
-              {(i === 0 || tries[i - 1]!.terme[0]!.toUpperCase() !== t.terme[0]!.toUpperCase()) && <span id={`lettre-${t.terme[0]!.toUpperCase()}`} className="block scroll-mt-24" />}
+            <div
+              key={t.id}
+              id={t.id}
+              data-lettre={i === 0 || tries[i - 1]!.terme[0]!.toUpperCase() !== t.terme[0]!.toUpperCase() ? t.terme[0]!.toUpperCase() : undefined}
+              className="scroll-mt-24 rounded-3xl bg-surface p-6 ring-1 ring-line target:ring-2 target:ring-accent-2"
+            >
               <dt className="font-display text-2xl font-semibold text-ink">{t.terme}</dt>
               <dd className="mt-2 leading-relaxed text-ink-2">{t.definition}</dd>
               <dd className="mt-3 flex flex-wrap gap-2 text-sm">

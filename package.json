@@ -16,7 +16,8 @@
     "test:e2e": "playwright test",
     "data:fetch": "node scripts/data/fetch-parcoursup.mjs",
     "conformance:generate": "bash tools/reference-harness/generate.sh",
-    "links:check": "node scripts/check-links.mjs"
+    "links:check": "node scripts/check-links.mjs",
+    "preview": "node scripts/serve-out.mjs"
   },
   "engines": {
     "node": ">=20"

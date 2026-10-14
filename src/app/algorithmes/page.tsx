@@ -92,7 +92,7 @@ export default function Algorithmes() {
                     <a key={c} href={lienGitlab(r)} className="block rounded-xl bg-white/5 p-3 ring-1 ring-white/10 transition hover:bg-white/10">
                       <span className="block font-mono text-sm font-semibold text-teal-200">{r.titre}</span>
                       <span className="mt-0.5 block text-xs text-slate-400">{r.resume}</span>
-                      <span className="mt-1 block font-mono text-[0.7rem] text-slate-500">
+                      <span className="mt-1 block font-mono text-[0.7rem] text-slate-400">
                         {r.fichier.split("/").pop()} · L{r.debut}–{r.fin} ↗
                       </span>
                     </a>

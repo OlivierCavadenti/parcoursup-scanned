@@ -47,7 +47,7 @@ export default function Quotas() {
           </div>
         </SectionNiveau>
         <SectionNiveau niveau="Approfondissement" titre="Quels taux, pour quelles formations" id="quels-taux">
-          <div className="overflow-x-auto rounded-2xl ring-1 ring-line">
+          <div tabIndex={0} role="region" aria-label="Tableau des taux (défilable)" className="overflow-x-auto rounded-2xl ring-1 ring-line">
             <table className="w-full min-w-[640px] text-left text-sm">
               <caption className="sr-only">Taux applicables selon les formations</caption>
               <thead className="bg-surface-2 text-ink">

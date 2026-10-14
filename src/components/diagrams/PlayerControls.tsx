@@ -54,6 +54,15 @@ export function PlayerControls({ player, nbEtapes, className, libelle = "Animati
 }
 
 export function Progression({ nb, courant, onAller, libelles }: { nb: number; courant: number; onAller: (i: number) => void; libelles?: string[] }) {
+  /* Au-delà de 8 étapes, des segments cliquables seraient trop petits (WCAG 2.2, taille de cible) :
+     on affiche une barre de progression ; la navigation passe par les boutons. */
+  if (nb > 8) {
+    return (
+      <div role="progressbar" aria-label="Progression de l'animation" aria-valuemin={1} aria-valuemax={nb} aria-valuenow={courant + 1} className="h-1.5 overflow-hidden rounded-full bg-surface-3">
+        <div className="h-full rounded-full bg-accent-2 transition-[width] duration-500" style={{ width: `${((courant + 1) / nb) * 100}%` }} />
+      </div>
+    );
+  }
   return (
     <div className="flex gap-1.5" role="tablist" aria-label="Étapes">
       {Array.from({ length: nb }, (_, i) => (
@@ -64,13 +73,10 @@ export function Progression({ nb, courant, onAller, libelles }: { nb: number; co
           aria-selected={i === courant}
           aria-label={libelles?.[i] ?? `Étape ${i + 1}`}
           onClick={() => onAller(i)}
-          className="group relative h-6 flex-1 min-w-3"
+          className="group relative h-6 min-w-6 flex-1"
         >
           <span className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-surface-3">
-            <span
-              className={cn("block h-full rounded-full bg-accent-2 transition-[width] duration-500", i < courant ? "w-full" : i === courant ? "w-full" : "w-0")}
-              style={{ opacity: i === courant ? 1 : 0.55 }}
-            />
+            <span className={cn("block h-full rounded-full bg-accent-2 transition-[width] duration-500", i <= courant ? "w-full" : "w-0")} style={{ opacity: i === courant ? 1 : 0.55 }} />
           </span>
         </button>
       ))}

@@ -24,7 +24,7 @@ export function CodeLink({ id, className, compact = false }: { id: CodeRefId; cl
         <div className="min-w-0 flex-1">
           <p className="break-words font-mono text-[0.9rem] font-semibold text-white [overflow-wrap:anywhere]">{ref.titre}</p>
           <p className="mt-1 text-sm leading-relaxed text-slate-400">{ref.resume}</p>
-          <p className="mt-2 truncate font-mono text-xs text-slate-500">
+          <p className="mt-2 truncate font-mono text-xs text-slate-400">
             {ref.fichier.replace("src/main/java/fr/parcoursup/algos/", "…/")} · lignes {ref.debut}–{ref.fin}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">

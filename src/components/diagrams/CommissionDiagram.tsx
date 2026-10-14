@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { FileText, HelpCircle, ListOrdered } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/cn";
 
 const DOSSIERS = ["Dossier A", "Dossier B", "Dossier C", "Dossier D", "Dossier E"];
 const ORDRE = [2, 0, 4, 1, 3];
@@ -25,7 +26,7 @@ export function CommissionDiagram() {
           <p className="mb-3 text-sm font-semibold text-ink">Dossiers reçus</p>
           <ul className="space-y-2">
             {DOSSIERS.map((d, i) => (
-              <motion.li key={d} animate={{ opacity: sortis.includes(i) ? 0.25 : 1, x: sortis.includes(i) ? 12 : 0 }} className="flex items-center gap-2 rounded-xl bg-surface-2 px-3 py-2 text-sm text-ink ring-1 ring-line">
+              <motion.li key={d} animate={{ x: sortis.includes(i) ? 12 : 0 }} className={cn("flex items-center gap-2 rounded-xl px-3 py-2 text-sm ring-1", sortis.includes(i) ? "border border-dashed border-line-strong bg-transparent text-muted ring-transparent" : "bg-surface-2 text-ink ring-line")}>
                 <FileText className="h-4 w-4 text-muted" aria-hidden="true" /> {d}
               </motion.li>
             ))}

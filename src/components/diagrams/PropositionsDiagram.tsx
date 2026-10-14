@@ -76,14 +76,14 @@ export function PropositionsDiagram() {
                     className={cn(
                       "relative flex items-center gap-3 rounded-xl px-3 py-2 ring-1 transition-colors",
                       l.nouveau ? "bg-green-soft/60 ring-green-2/60" : "bg-surface-2/60 ring-line",
-                      inactif && "opacity-55",
+                      inactif && "border border-dashed border-line-strong bg-transparent ring-transparent",
                     )}
                   >
                     {l.nouveau && (
                       <motion.span className="absolute inset-0 rounded-xl ring-2 ring-green-2" initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1.6 }} aria-hidden="true" />
                     )}
                     <span className="w-6 text-right font-mono text-sm tabular-nums text-muted">{l.rangAppel}</span>
-                    <span className={cn("flex-1 font-medium text-ink", inactif && "line-through decoration-1")}>{l.nom}</span>
+                    <span className={cn("flex-1 font-medium", inactif ? "text-muted line-through decoration-1" : "text-ink")}>{l.nom}</span>
                     <motion.span layout className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", pill.cls)}>
                       {pill.label}
                     </motion.span>
