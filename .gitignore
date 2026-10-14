@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+tools/reference-harness/build/
+data-cache/
+.DS_Store

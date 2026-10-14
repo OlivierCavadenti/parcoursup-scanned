@@ -1,0 +1,54 @@
+{
+  "name": "parcoursup-decrypte",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Parcoursup Décrypté — observatoire citoyen indépendant pour comprendre les mécanismes de Parcoursup.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "npx serve out",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "data:fetch": "node scripts/data/fetch-parcoursup.mjs",
+    "conformance:generate": "bash tools/reference-harness/generate.sh",
+    "links:check": "node scripts/check-links.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "clsx": "2.1.1",
+    "d3-array": "3.2.4",
+    "d3-scale": "4.0.2",
+    "d3-shape": "3.2.0",
+    "lucide-react": "0.545.0",
+    "lz-string": "1.5.0",
+    "motion": "12.43.0",
+    "next": "16.4.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwind-merge": "3.3.1",
+    "zod": "4.1.13",
+    "zustand": "5.0.8"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.56.1",
+    "@tailwindcss/postcss": "4.1.18",
+    "@types/d3-array": "3.2.2",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-shape": "3.1.7",
+    "@types/node": "22.18.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "postcss": "8.5.30",
+    "tailwindcss": "4.1.18",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  }
+}
