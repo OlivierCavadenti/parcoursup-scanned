@@ -11,6 +11,5 @@
 | Répondeur automatique | RepondeurAutomatique l. 82-132 ; §6 | idem + exemple §6.1 | **Conforme 2024-2** | — |
 | Démission auto GDD | DemissionAutoVoeuxOrdonnes l. 79-119 | idem | **Conforme 2024-2** | — |
 | Arrêt des admissions (adm_stop) | AlgoPropositions (EVOL 2024) | idem | **Conforme 2024-2** | usage réel non documenté |
-| Simulation multi-journées (réponses des candidats) | ExemplePropositions (bac à sable) | `tests/unit/simulation.test.ts` | **Simplification pédagogique** : les réponses sont des choix de l'utilisateur ou de scénarios | délais réglementaires non modélisés |
-| Rang sur liste d'attente affiché | AlgosAffichages l. 94-159 | — | **Simplification pédagogique** | réintégrations non modélisées |
-| Commission d'examen fictive | aucune (pratiques locales non publiques) | `tests/unit/commission.test.ts` | **Expérimental / fictif** | entièrement fictif |
+| Rang sur liste d'attente affiché | AlgosAffichages l. 94-159 | — | Expliqué en texte, non reproduit | réintégrations |
+| Schémas animés (ordre d'appel, internat, répondeur) | exemples de la présentation 2023 | calculés au build par le moteur de référence ; `tests/unit/exemples-officiels.test.ts` | **Conforme** (mêmes données que les tests) | — |

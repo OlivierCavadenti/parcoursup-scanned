@@ -1,0 +1,74 @@
+name: Déploiement GitHub Pages
+
+on:
+  push:
+    branches: [main, claude/vigilant-brahmagupta-r7389g]
+  workflow_dispatch:
+  schedule:
+    # rafraîchit les données ouvertes chaque lundi
+    - cron: "17 5 * * 1"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Vérification des types
+        run: pnpm typecheck
+
+      - name: Tests unitaires et de conformité
+        run: pnpm test
+
+      - name: Configuration de GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Import des données ouvertes (non bloquant)
+        run: pnpm data:fetch
+
+      - name: Build statique
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
+
+      - name: Vérification des liens externes (avertissements)
+        run: pnpm links:check
+        continue-on-error: true
+
+      - run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

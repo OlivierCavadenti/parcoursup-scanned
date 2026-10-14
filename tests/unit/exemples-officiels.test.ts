@@ -4,9 +4,9 @@
  * du dépôt officiel) et des classes ExempleA1…A6 du bac à sable officiel.
  */
 import { describe, expect, it } from "vitest";
-import { calculerOrdreAppel, type VoeuClasse } from "@/simulation/engine/reference/ordre-appel";
-import { verifierProprietesOrdreAppel } from "@/simulation/engine/reference/verifications-ordre-appel";
-import { calculerPropositions, type EntreePropositions, type VoeuEntree } from "@/simulation/engine/reference/propositions";
+import { calculerOrdreAppel, type VoeuClasse } from "@/algorithmes/reference/ordre-appel";
+import { verifierProprietesOrdreAppel } from "@/algorithmes/reference/verifications-ordre-appel";
+import { calculerPropositions, type EntreePropositions, type VoeuEntree } from "@/algorithmes/reference/propositions";
 
 /** Construit un classement à partir d'une notation compacte : B=boursier hors secteur, D=boursier du secteur, R=résident, C/N=autre */
 function classement(lettres: string[]): VoeuClasse[] {

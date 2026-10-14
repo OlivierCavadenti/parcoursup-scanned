@@ -9,3 +9,4 @@ test-results/
 tools/reference-harness/build/
 data-cache/
 .DS_Store
+public/data/parcoursup/

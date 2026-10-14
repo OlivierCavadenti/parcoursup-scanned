@@ -4,8 +4,8 @@
  * depuis le dépôt officiel (version 2024-2, commit 8c406bf).
  */
 import { describe, expect, it } from "vitest";
-import { calculerOrdreAppel, type GroupeClassement } from "@/simulation/engine/reference/ordre-appel";
-import { verifierProprietesOrdreAppel } from "@/simulation/engine/reference/verifications-ordre-appel";
+import { calculerOrdreAppel, type GroupeClassement } from "@/algorithmes/reference/ordre-appel";
+import { verifierProprietesOrdreAppel } from "@/algorithmes/reference/verifications-ordre-appel";
 import { chargerFixtures } from "./fixtures";
 
 interface FixtureOa {

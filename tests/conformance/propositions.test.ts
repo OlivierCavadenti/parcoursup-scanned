@@ -4,7 +4,7 @@
  * démissions automatiques en GDD, drapeau adm_stop).
  */
 import { describe, expect, it } from "vitest";
-import { calculerPropositions, type EntreePropositions, type StatutVoeu } from "@/simulation/engine/reference/propositions";
+import { calculerPropositions, type EntreePropositions, type StatutVoeu } from "@/algorithmes/reference/propositions";
 import { chargerFixtures } from "./fixtures";
 
 interface FixtureP {

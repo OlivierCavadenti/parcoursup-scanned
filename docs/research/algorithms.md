@@ -32,7 +32,7 @@ on ne sait pas si le code a évolué pour les campagnes 2025 et 2026.
   Ministère de l'Enseignement Supérieur, de la Recherche et de l'Innovation, Hugo Gimbert ».
 - Conséquence pour ce projet : le moteur TypeScript est une **adaptation** (portage) du code
   officiel ; il est donc distribué sous **AGPL-3.0-or-later**, avec mention de l'origine et
-  des modifications (en-têtes des fichiers `src/simulation/engine/reference/*`). Le site étant
+  des modifications (en-têtes des fichiers `src/algorithmes/reference/*`). Le site étant
   servi sur le réseau, le code source complet est publié (dépôt GitHub du projet), ce qui
   satisfait l'article 13 de l'AGPL.
 - Le harnais Java (`tools/reference-harness`) n'inclut aucune ligne du code officiel : il
@@ -76,7 +76,7 @@ exactement à `b × 100 < qB × k`, où k = nbAppelés + 1. Un taux non entier e
 arrondi « à l'entier supérieur » comme l'indique la présentation.
 
 **Invariants vérifiés par le code officiel** (`VerificationsResultatsAlgoOrdreAppel`,
-P1 à P5) : voir `src/simulation/engine/reference/verifications-ordre-appel.ts`.
+P1 à P5) : voir `src/algorithmes/reference/verifications-ordre-appel.ts`.
 - P1 : pour tout k, au moins qB % des k premiers sont boursiers, sinon plus aucun boursier après ;
 - P2 : un boursier du secteur n'est jamais doublé ;
 - P3 : un non-boursier du secteur n'est doublé que par des boursiers, rang ≤ 1 + ⌊(1 + qB/(100−qB))·r⌋ ;
@@ -151,7 +151,7 @@ démission des vœux en attente et des propositions non encore acceptées moins 
 
 | Algorithme | Fichier TypeScript | Statut | Preuve |
 |---|---|---|---|
-| Ordre d'appel | `src/simulation/engine/reference/ordre-appel.ts` | **Conforme à la version 2024-2** | 300 cas différentiels + exemples officiels + propriétés P1-P5 |
-| Propositions (groupes, internats, répondeur, GDD, adm_stop) | `src/simulation/engine/reference/propositions.ts` | **Conforme à la version 2024-2** | 430 journées simulées différentielles |
-| Affichages (rangs liste d'attente) | `src/simulation/engine/pedagogique/*` | Simplification pédagogique | non comparé |
+| Ordre d'appel | `src/algorithmes/reference/ordre-appel.ts` | **Conforme à la version 2024-2** | 300 cas différentiels + exemples officiels + propriétés P1-P5 |
+| Propositions (groupes, internats, répondeur, GDD, adm_stop) | `src/algorithmes/reference/propositions.ts` | **Conforme à la version 2024-2** | 430 journées simulées différentielles |
+| Affichages (rangs liste d'attente) | — | Non porté (expliqué en texte uniquement) | — |
 | Vérification a posteriori non bloquante | — | Non porté | voir limitations |
